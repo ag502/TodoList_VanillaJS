@@ -1,5 +1,6 @@
 import dummyData from "../constants/dummyData.js";
 import TodoInput from "../components/TodoInput.js";
+import TodoCounter from "../components/TodoCounter.js"
 import Todo from "../components/Todo.js";
 
 class TodoList {
@@ -8,12 +9,14 @@ class TodoList {
         this.$app = $app
         this.$todoInput = new TodoInput(this.addTodo)
         this.$todoList = new Todo(this.todoData)
+        this.$todoCounter = new TodoCounter(this.todoData)
         this.render()
     }
 
     setState = (newTodoData) => {
         this.todoData = newTodoData
         this.$todoList.setState(this.todoData)
+        this.$todoCounter.setState(this.todoData)
         this.render()
     }
 
@@ -32,6 +35,7 @@ class TodoList {
 
     render = () => {
         this.$app.appendChild(this.$todoInput.$inputWrapper)
+        this.$app.appendChild(this.$todoCounter.$todoCounter)
         this.$app.appendChild(this.$todoList.$todoListWrapper)
     }
 }
