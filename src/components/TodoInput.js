@@ -1,5 +1,6 @@
-function TodoInput(onSubmit) {
-    const render = () => {
+function TodoInput(addTodo) {
+
+    this.render = () => {
         this.$inputWrapper = document.createElement("div")
 
         const $input = document.createElement("input")
@@ -7,15 +8,26 @@ function TodoInput(onSubmit) {
 
         const $submitBtn = document.createElement("button")
         $submitBtn.innerText = "제출"
+
         $submitBtn.addEventListener("click", function() {
-            onSubmit($input.value)
+            if ($input.value) {
+                addTodo($input.value)
+                $input.value = ""
+            }
+        })
+
+        $input.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                addTodo($input.value)
+                $input.value = ""
+            }
         })
 
         this.$inputWrapper.appendChild($input)
         this.$inputWrapper.appendChild($submitBtn)
     }
 
-    render()
+    this.render()
 }
 
 export default TodoInput

@@ -3,22 +3,36 @@ import TodoInput from "../components/TodoInput.js";
 import Todo from "../components/Todo.js";
 
 class TodoList {
-    constructor($container) {
-        this.$container = $container
-        this.$todoInput = new TodoInput(this.handleInputSubmit)
+    constructor($app) {
+        this.todoData = dummyData
+        this.$app = $app
+        this.$todoInput = new TodoInput(this.addTodo)
+        this.$todoList = new Todo(this.todoData)
         this.render()
     }
 
-    handleInputSubmit = (newTodo) => {
-        console.log(newTodo)
+    setState = (newTodoData) => {
+        this.todoData = newTodoData
+        this.$todoList.setState(this.todoData)
+        this.render()
+    }
+
+    addTodo = (newTodo) => {
+        const todoData = [
+            ...this.todoData,
+            {
+                userId: this.todoData.length,
+                title: newTodo,
+                completed: false
+            }
+        ]
+        this.setState(todoData)
     }
 
 
     render = () => {
-        this.$container.appendChild(this.$todoInput.$inputWrapper)
-        dummyData.forEach(todo => {
-            this.$container.insertAdjacentHTML("beforeend", Todo(todo))
-        })
+        this.$app.appendChild(this.$todoInput.$inputWrapper)
+        this.$app.appendChild(this.$todoList.$todoListWrapper)
     }
 }
 

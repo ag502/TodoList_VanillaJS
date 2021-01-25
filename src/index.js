@@ -1,3 +1,3 @@
 import TodoList from "./views";
 
-new TodoList(document.querySelector("#todo-list"))
+new TodoList(document.querySelector("#app"))
