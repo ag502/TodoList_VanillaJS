@@ -8,7 +8,7 @@ class TodoList {
         this.todoData = dummyData
         this.$app = $app
         this.$todoInput = new TodoInput(this.addTodo)
-        this.$todoList = new Todo(this.todoData)
+        this.$todoList = new Todo(this.todoData, this.toggleComplete)
         this.$todoCounter = new TodoCounter(this.todoData)
         this.render()
     }
@@ -24,12 +24,23 @@ class TodoList {
         const todoData = [
             ...this.todoData,
             {
-                userId: this.todoData.length,
+                userId: 1,
+                id: this.todoData.length,
                 title: newTodo,
                 completed: false
             }
         ]
         this.setState(todoData)
+    }
+
+    toggleComplete = (todoId) => {
+        const targetTodoIndex = this.todoData.findIndex(({id}) => id === todoId)
+        const newTodoData = [
+            ...this.todoData.slice(0, targetTodoIndex),
+            {...this.todoData[targetTodoIndex], completed: !this.todoData[targetTodoIndex].completed},
+            ...this.todoData.slice(targetTodoIndex + 1)
+        ]
+        this.setState(newTodoData)
     }
 
 
