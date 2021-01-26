@@ -1,12 +1,15 @@
 class Todo {
-    constructor(todoData, toggleComplete) {
+    constructor(todoData, toggleComplete, deleteTodo) {
         this.todoData = todoData
         this.$todoListWrapper = document.createElement("div")
         this.$todoListWrapper.setAttribute("class", "todo-list")
         this.$todoListWrapper.addEventListener("click", (e) => {
             const {target} = e
-            if (target.hasAttribute("id")) {
-                toggleComplete(parseInt(target.getAttribute("id")))
+            console.log(target.tagName)
+            if (target.tagName === "SPAN") {
+                toggleComplete(parseInt(target.dataset.id))
+            } else if (target.tagName === "BUTTON") {
+                deleteTodo(parseInt(target.dataset.id))
             }
         })
         this.render()
@@ -15,9 +18,9 @@ class Todo {
     render = () => {
         const $todoList = this.todoData.map(({id, completed, title}) => {
             if (completed) {
-                return `<div><del><span id=${id}>${title}</span></del></div>`
+                return `<div><del><span data-id=${id}>${title}</span></del><button data-id=${id}>✖</button></div>`
             } else {
-                return `<div><span id=${id}>${title}</span></div>`
+                return `<div><span data-id=${id}>${title}</span><button data-id=${id}>✖</button></div>`
             }
         }).join('')
         this.$todoListWrapper.innerHTML = $todoList

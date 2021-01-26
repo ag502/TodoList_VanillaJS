@@ -8,7 +8,7 @@ class TodoList {
         this.todoData = dummyData
         this.$app = $app
         this.$todoInput = new TodoInput(this.addTodo)
-        this.$todoList = new Todo(this.todoData, this.toggleComplete)
+        this.$todoList = new Todo(this.todoData, this.toggleComplete, this.deleteTodo)
         this.$todoCounter = new TodoCounter(this.todoData)
         this.render()
     }
@@ -25,7 +25,7 @@ class TodoList {
             ...this.todoData,
             {
                 userId: 1,
-                id: this.todoData.length,
+                id: this.todoData.length + 1,
                 title: newTodo,
                 completed: false
             }
@@ -38,6 +38,15 @@ class TodoList {
         const newTodoData = [
             ...this.todoData.slice(0, targetTodoIndex),
             {...this.todoData[targetTodoIndex], completed: !this.todoData[targetTodoIndex].completed},
+            ...this.todoData.slice(targetTodoIndex + 1)
+        ]
+        this.setState(newTodoData)
+    }
+
+    deleteTodo = (todoId) => {
+        const targetTodoIndex = this.todoData.findIndex(({id}) => id === todoId)
+        const newTodoData = [
+            ...this.todoData.slice(0, targetTodoIndex),
             ...this.todoData.slice(targetTodoIndex + 1)
         ]
         this.setState(newTodoData)
