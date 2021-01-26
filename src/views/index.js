@@ -1,11 +1,10 @@
-import dummyData from "../constants/dummyData.js";
 import TodoInput from "../components/TodoInput.js";
 import TodoCounter from "../components/TodoCounter.js"
 import Todo from "../components/Todo.js";
 
 class TodoList {
     constructor($app) {
-        this.todoData = dummyData
+        this.fetchData()
         this.$app = $app
         this.$todoInput = new TodoInput(this.addTodo)
         this.$todoList = new Todo(this.todoData, this.toggleComplete, this.deleteTodo)
@@ -13,8 +12,23 @@ class TodoList {
         this.render()
     }
 
+    fetchData = () => {
+        try {
+            const todoData = localStorage.getItem("todo")
+            if (todoData) {
+                this.todoData = JSON.parse(todoData)
+            } else {
+                this.todoData = []
+            }
+        } catch (error) {
+            this.todoData = []
+        }
+    }
+
     setState = (newTodoData) => {
         this.todoData = newTodoData
+        localStorage.setItem("todo", JSON.stringify(newTodoData))
+
         this.$todoList.setState(this.todoData)
         this.$todoCounter.setState(this.todoData)
         this.render()
