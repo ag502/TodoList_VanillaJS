@@ -2,10 +2,11 @@ import TodoInput from "../components/TodoInput.js";
 import TodoCounter from "../components/TodoCounter.js"
 import Todo from "../components/Todo.js";
 import TodoDetail from "../components/TodoDetail.js";
+import {getPosts} from "../constants/api.js";
 
 class TodoList {
     constructor($app) {
-        this.fetchData()
+        this.todoData = []
         this.$app = $app
         this.$openDetail = false;
 
@@ -14,20 +15,19 @@ class TodoList {
         this.$todoCounter = new TodoCounter(this.todoData)
         this.$todoDetail = new TodoDetail($app, this.$openDetail, this.closeDetail)
 
+        this.fetchData()
         this.render()
     }
 
-    fetchData = () => {
+    fetchData = async () => {
+        let todoData = null
         try {
-            const todoData = localStorage.getItem("todo")
-            if (todoData) {
-                this.todoData = JSON.parse(todoData)
-            } else {
-                this.todoData = []
-            }
+            todoData = await getPosts()
         } catch (error) {
-            this.todoData = []
+            console.log(error)
+            todoData = []
         }
+        this.setState(todoData)
     }
 
     setState = (newTodoData) => {
